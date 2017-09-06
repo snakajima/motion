@@ -12,19 +12,22 @@ import CoreMotion
 class ViewController: UIViewController {
     
     let manager = CMMotionManager()
+    @IBOutlet var labelRoll:UILabel!
+    @IBOutlet var labelPitch:UILabel!
+    @IBOutlet var labelYaw:UILabel!
 
     override func viewDidLoad() {
         super.viewDidLoad()
         
         if manager.isDeviceMotionAvailable {
-            manager.deviceMotionUpdateInterval = 0.5 // default is 0.1
-            manager.startDeviceMotionUpdates(to: OperationQueue.main, withHandler: { (motion, error) in
+            manager.deviceMotionUpdateInterval = 0.1 // default is 0.1
+            manager.showsDeviceMovementDisplay = true
+            manager.startDeviceMotionUpdates(using: .xMagneticNorthZVertical, to: OperationQueue.main, withHandler: { (motion, error) in
                 guard let motion = motion else { return }
-                let gravity = motion.gravity
-                let gs = gravity.x * gravity.x + gravity.y * gravity.y + gravity.z * gravity.z
-                let user = motion.userAcceleration
-                let us = user.x * user.x + user.y * user.y + user.z * user.z
-                print("gs/us:", gs, us)
+                //print("motion:", motion.attitude.roll, motion.attitude.pitch, motion.attitude.yaw)
+                self.labelRoll.text = String(round(motion.attitude.roll * 360.0))
+                self.labelPitch.text = String(round(motion.attitude.pitch * 360.0))
+                self.labelYaw.text = String(round(motion.attitude.yaw * 360.0))
             })
         }
     }

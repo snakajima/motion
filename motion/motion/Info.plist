@@ -32,5 +32,9 @@
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
 	</array>
+	<key>NSMotionUsageDescription</key>
+	<string>Track movements</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>Track movements</string>
 </dict>
 </plist>

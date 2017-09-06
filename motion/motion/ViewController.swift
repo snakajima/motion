@@ -22,8 +22,20 @@ class ViewController: UIViewController {
         if manager.isDeviceMotionAvailable {
             manager.deviceMotionUpdateInterval = 0.1 // default is 0.1
             manager.showsDeviceMovementDisplay = true
-            manager.startDeviceMotionUpdates(using: .xMagneticNorthZVertical, to: OperationQueue.main, withHandler: { (motion, error) in
+            manager.startDeviceMotionUpdates(using: .xMagneticNorthZVertical, to: OperationQueue.main, withHandler: { (motion, e) in
+                if let error = e {
+                    print("error:", error)
+                    return
+                }
                 guard let motion = motion else { return }
+                if motion.magneticField.accuracy == .uncalibrated {
+                    print("uncalibrated")
+                    return
+                }
+                if motion.magneticField.accuracy == .low {
+                    print("need calibration low")
+                    return
+                }
                 //print("motion:", motion.attitude.roll, motion.attitude.pitch, motion.attitude.yaw)
                 self.labelRoll.text = String(round(motion.attitude.roll * 360.0))
                 self.labelPitch.text = String(round(motion.attitude.pitch * 360.0))

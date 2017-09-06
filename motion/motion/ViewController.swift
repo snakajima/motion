@@ -22,12 +22,13 @@ class ViewController: UIViewController {
         if manager.isDeviceMotionAvailable {
             manager.deviceMotionUpdateInterval = 0.1 // default is 0.1
             manager.showsDeviceMovementDisplay = true
-            manager.startDeviceMotionUpdates(using: .xMagneticNorthZVertical, to: OperationQueue.main, withHandler: { (motion, e) in
+            manager.startDeviceMotionUpdates(using: .xArbitraryZVertical, to: OperationQueue.main, withHandler: { (motion, e) in
                 if let error = e {
                     print("error:", error)
                     return
                 }
                 guard let motion = motion else { return }
+                /*
                 if motion.magneticField.accuracy == .uncalibrated {
                     print("uncalibrated")
                     return
@@ -36,10 +37,15 @@ class ViewController: UIViewController {
                     print("need calibration low")
                     return
                 }
+                 */
                 //print("motion:", motion.attitude.roll, motion.attitude.pitch, motion.attitude.yaw)
-                self.labelRoll.text = String(round(motion.attitude.roll * 360.0))
-                self.labelPitch.text = String(round(motion.attitude.pitch * 360.0))
-                self.labelYaw.text = String(round(motion.attitude.yaw * 360.0))
+                //let quat = motion.attitude.quaternion
+                //let roll = atan2(2*(quat.y*quat.w - quat.x*quat.z), 1 - 2*quat.y*quat.y - 2*quat.z*quat.z)
+                //let pitch = atan2(2*(quat.x*quat.w + quat.y*quat.z), 1 - 2*quat.x*quat.x - 2*quat.z*quat.z)
+                //let yaw = asin(2*quat.x*quat.y + 2*quat.w*quat.z)
+                self.labelRoll.text = String(round(motion.attitude.roll * 180.0 / .pi))
+                self.labelPitch.text = String(round(motion.attitude.pitch * 180.0 / .pi))
+                self.labelYaw.text = String(round(motion.attitude.yaw * 180.0 / .pi))
             })
         }
     }
